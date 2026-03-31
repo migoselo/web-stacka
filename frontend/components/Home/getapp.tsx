@@ -97,7 +97,7 @@ const FeatureSection: React.FC = () => {
       }}
     >
       <img
-        src="/assets/images/Home.svg"
+        src="/assets/images/home.svg"
         alt="product"
         style={{
           maxWidth: "900px",
