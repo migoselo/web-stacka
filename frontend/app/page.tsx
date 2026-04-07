@@ -5,7 +5,7 @@ import HowItWorks from "@/components/How It Works/howitworks";
 
 export default function Home() {
   return (
-    <main style={{ backgroundColor: "white" }}>
+    <main className="bg-white">
       <HeroSection />
       <FeatureSection />
       <About />
