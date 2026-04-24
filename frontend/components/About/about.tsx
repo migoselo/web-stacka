@@ -4,28 +4,29 @@ export default function About() {
   return (
     <div
       id="about"
-      className="w-[1440px] h-[980px] mx-auto bg-white flex flex-col items-center"
+      className="w-full md:w-[1440px] h-auto md:h-[980px] mx-auto px-4 md:px-0 bg-white flex flex-col items-center py-12 md:py-0"
     >
       {/* LOGO */}
-      <div className="mt-[60px]">
+      <div className="mt-6 md:mt-[60px]">
         <Image
           src="/assets/images/Logo 2.svg"
           alt="Stacka Logo"
-          width={60}
-          height={60}
+          width={40}
+          height={40}
+          className="w-10 h-10 md:w-[60px] md:h-[60px]"
         />
       </div>
 
       {/* TITLE */}
-      <div className="mt-[30px] w-[592px] text-center">
+      <div className="mt-6 md:mt-[30px] w-full md:w-[592px] text-center px-2">
         <h1
-          className="text-[40px] font-semibold text-black leading-snug"
+          className="text-lg md:text-[40px] font-semibold text-black leading-snug"
           style={{ fontFamily: "Montserrat, sans-serif" }}
         >
           Why Study Notes Are Still Hard to Find
         </h1>
         <p
-          className="text-gray-500 text-[14px] mt-[12px]"
+          className="text-xs md:text-[14px] mt-2 md:mt-[12px]"
           style={{ fontFamily: "Montserrat", color: "#9D9D9D" }}
         >
           Students struggle to find reliable notes in one place.
@@ -33,20 +34,20 @@ export default function About() {
       </div>
 
       {/* CARD SECTION */}
-      <div className="mt-[50px] w-[1205px] h-[247px] flex justify-between">
+      <div className="mt-8 md:mt-[50px] w-full md:w-[1205px] md:h-[247px] flex flex-col md:flex-row justify-between gap-4 md:gap-0">
         <div
-          className="w-[370px] h-[220px] bg-white rounded-[30px] p-[28px]"
+          className="w-full md:w-[370px] h-auto md:h-[220px] bg-white rounded-2xl md:rounded-[30px] p-6 md:p-[28px]"
           style={{ boxShadow: "0px 0px 33px rgba(0,0,0,0.08)" }}
         >
           <h3
-            className="text-[20px] font-semibold text-black"
+            className="text-lg md:text-[20px] font-semibold text-black"
             style={{ fontFamily: "Montserrat" }}
           >
             Hard to Understand <br /> Materials
           </h3>
 
           <p
-            className="text-[14px] mt-[12px]"
+            className="text-xs md:text-[14px] mt-2 md:mt-[12px]"
             style={{ fontFamily: "Montserrat", color: "#9D9D9D" }}
           >
             Lecture materials are often difficult to understand without clear
@@ -55,18 +56,18 @@ export default function About() {
         </div>
 
         <div
-          className="w-[370px] h-[220px] bg-white rounded-[30px] p-[28px]"
+          className="w-full md:w-[370px] h-auto md:h-[220px] bg-white rounded-2xl md:rounded-[30px] p-6 md:p-[28px]"
           style={{ boxShadow: "0px 0px 33px rgba(0,0,0,0.08)" }}
         >
           <h3
-            className="text-[20px] font-semibold text-black"
+            className="text-lg md:text-[20px] font-semibold text-black"
             style={{ fontFamily: "Montserrat" }}
           >
             Limited Study <br /> Resources
           </h3>
 
           <p
-            className="text-[14px] mt-[12px]"
+            className="text-xs md:text-[14px] mt-2 md:mt-[12px]"
             style={{ fontFamily: "Montserrat", color: "#9D9D9D" }}
           >
             Valuable study materials and notes are often hard to access or
@@ -75,18 +76,18 @@ export default function About() {
         </div>
 
         <div
-          className="w-[370px] h-[220px] bg-white rounded-[30px] p-[28px]"
+          className="w-full md:w-[370px] h-auto md:h-[220px] bg-white rounded-2xl md:rounded-[30px] p-6 md:p-[28px]"
           style={{ boxShadow: "0px 0px 33px rgba(0,0,0,0.08)" }}
         >
           <h3
-            className="text-[20px] font-semibold text-black"
+            className="text-lg md:text-[20px] font-semibold text-black"
             style={{ fontFamily: "Montserrat" }}
           >
             Scattered and <br /> Disorganized Notes
           </h3>
 
           <p
-            className="text-[14px] mt-[12px]"
+            className="text-xs md:text-[14px] mt-2 md:mt-[12px]"
             style={{ fontFamily: "Montserrat", color: "#9D9D9D" }}
           >
             Study notes are spread across different platforms, making them
@@ -96,11 +97,11 @@ export default function About() {
       </div>
 
       {/* MEET STACKA */}
-      <div className="mt-[70px] w-full max-w-[1201px] flex flex-col md:flex-row gap-8 px-4">
+      <div className="mt-8 md:mt-[70px] w-full max-w-[1201px] flex flex-col md:flex-row gap-8 md:gap-8 px-4 md:px-0">
         {/* LEFT */}
-        <div className="w-full md:w-[421px]">
+        <div className="w-full md:w-[421px] flex-shrink-0">
           <h2
-            className="text-[40px] font-semibold flex items-center gap-2 text-black"
+            className="text-2xl md:text-[40px] font-semibold flex items-center gap-1 md:gap-2 text-black"
             style={{ fontFamily: "Montserrat, sans-serif" }}
           >
             Meet
@@ -111,7 +112,7 @@ export default function About() {
                 src="/assets/images/Coret.svg"
                 alt="coret"
                 fill
-                className="absolute left-[-10px] bottom-[-10px] scale-[1.95] translate-x-3"
+                className="absolute left-[-10px] bottom-[-10px] scale-[2.37] md:scale-[2.17] translate-x-3"
               />
             </span>
           </h2>
@@ -119,7 +120,7 @@ export default function About() {
 
         {/* RIGHT TEXT */}
         <div
-            className="w-[747px] text-[16px] leading-relaxed space-y-[18px] text-justify"
+            className="w-full md:w-[747px] text-sm md:text-[16px] leading-relaxed space-y-3 md:space-y-[18px] text-justify"
             style={{ fontFamily: "Montserrat", color: "#9D9D9D" }}
         >
           <p>
