@@ -18,7 +18,7 @@ class DemoMemoController extends Controller
     {
         $request->validate([
             'type' => 'required|in:note,image',
-            'content' => 'required|string',
+            'content' => 'required|string|max:50',
         ]);
 
         $memo = DemoMemo::create([
