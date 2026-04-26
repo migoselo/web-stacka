@@ -1,7 +1,9 @@
-import type { Metadata } from "next";
+'use client';
+
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "../components/Home/navbar";
+import { usePathname } from "next/navigation";
 //import ScaleWrapper from "../components/ScaleWrapper";
 
 const geistSans = Geist({
@@ -14,16 +16,14 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Stacka",
-  description: "A platform for students to access shared study notes and organize learning materials",
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+  const showNavbar = !pathname.startsWith('/sticky-board');
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -31,7 +31,7 @@ export default function RootLayout({
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {/* <ScaleWrapper> */}
-          <Navbar />
+          {showNavbar && <Navbar />}
           {children}
         {/* </ScaleWrapper> */}
       </body>

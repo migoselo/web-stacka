@@ -1,4 +1,5 @@
-import { HeroSection, FeatureSection } from "@/components/Home/getapp";
+import { HeroSection } from "@/components/Home/getapp";
+import { FeatureSection } from "@/components/Home/FeatureSection";
 import About from "@/components/About/about";
 import HowItWorks from "@/components/How It Works/howitworks";
 
