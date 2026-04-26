@@ -20,7 +20,8 @@ return [
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [
-    // 'https://nama-project-kamu.vercel.app', 
+    'https://getstacka.com',
+    'https://www.getstacka.com', 
     'http://localhost:3000'
 ],
 
