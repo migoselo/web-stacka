@@ -16,7 +16,7 @@ interface NoteData {
 interface NoteProps extends NoteData {
   onTextChange: (id: number, newText: string) => void;
   onRemove: (id: number) => void;
-  onSave: (id: number) => void;
+  onSave: (id: number, content: string) => void;
 }
 
 // --- Component: StickyNote ---
@@ -90,15 +90,15 @@ const StickyNote = ({
       setError("Write something first!");
       return;
     }
-    if (text.length > 100) {
-      setError("Maximum 100 characters!");
+    if (text.length > 50) {
+      setError("Maximum 50 characters!");
       return;
     }
     setSaving(true);
     setError("");
     try {
       await createMemo("note", text);
-      onSave(id);
+      onSave(id, text);
     } catch (e: unknown) {
       const error = e as Error;
       setError(error.message || "Failed to save");
@@ -136,15 +136,24 @@ const StickyNote = ({
         </svg>
       </button>
 
+      {mode === "type" && (
+        <span
+          className="absolute top-6 left-0 right-0 text-center z-30 text-gray-500 text-xs"
+          style={{ fontFamily: "'Montserrat', sans-serif" }}>
+          {text.length}/50
+        </span>
+      )}
+
       <textarea
         value={text}
         onChange={(e) => {
           onTextChange(id, e.target.value);
           setError("");
         }}
+        maxLength={50}
         className={`w-full h-full bg-transparent p-12 outline-none resize-none text-center flex items-center justify-center leading-tight 
                     ${mode === "type" ? "z-20 opacity-100" : "z-0 opacity-0 pointer-events-none"}`}
-        style={{ fontSize: "30px", border: "none" }}
+        style={{ fontSize: "30px", border: "none", wordBreak: "break-word" }}
       />
 
       <canvas
@@ -218,7 +227,7 @@ export default function StackaBoard() {
       mode: selectedMode,
       saved: false,
     };
-    setNotes([...notes, newNote]);
+    setNotes([newNote, ...notes]);
   };
 
   const handleTextChange = (id: number, newText: string) => {
@@ -231,10 +240,18 @@ export default function StackaBoard() {
     setNotes((prev) => prev.filter((n) => n.id !== id));
   };
 
-  const handleSave = (id: number) => {
-    setNotes((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, saved: true } : n)),
-    );
+  const handleSave = (id: number, content: string) => {
+    setNotes((prev) => prev.filter((n) => n.id !== id));
+    setSavedMemos((prev) => [
+      {
+        id: Date.now(),
+        type: "note",
+        content,
+        created_at: new Date().toISOString(),
+        expires_at: new Date().toISOString(),
+      },
+      ...prev,
+    ]);
   };
 
   return (
@@ -266,27 +283,17 @@ export default function StackaBoard() {
       <main className="flex-1 p-6 sm:p-10 lg:p-16 mb-24 lg:mb-0">
         <div className="max-w-262.5 mx-auto lg:ml-50">
           <div className="flex flex-wrap gap-6 lg:gap-9.5 justify-center lg:justify-start items-start">
+            <p
+              className="text-center text-[#1F1F1F] text-[16px] font-medium mb-6 bg-[#F6F6F6] pt-3.75 pb-3.75 pl-14.5 pr-14.5 rounded-xl bold"
+              style={{ fontFamily: "'Montserrat', sans-serif" }}>
+              Select a mode on the side to create a new note. The note you
+              created will disappear within 24 hours.
+            </p>
             {loading && (
               <div className="w-full text-center mt-20 text-gray-400">
                 Loading...
               </div>
             )}
-
-            {savedMemos.map((memo) => (
-              <div
-                key={memo.id}
-                className="relative shadow-lg flex items-center justify-center shrink-0"
-                style={{
-                  width: "300px",
-                  height: "300px",
-                  backgroundColor: "#EDD6D3",
-                  borderRadius: "20px",
-                  fontFamily: "'Patrick Hand', cursive",
-                  fontSize: "30px",
-                }}>
-                <p className="p-12 text-center leading-tight">{memo.content}</p>
-              </div>
-            ))}
 
             {notes.map((note) => (
               <StickyNote
@@ -297,11 +304,26 @@ export default function StackaBoard() {
                 onSave={handleSave}
               />
             ))}
-            {notes.length === 0 && (
-              <div className="w-full text-center mt-20 text-gray-400 font-medium">
-                Select a mode on the side to create a new note.
+
+            {savedMemos.map((memo, index) => (
+              <div
+                key={memo.id}
+                className="relative shadow-lg flex items-center justify-center shrink-0"
+                style={{
+                  width: "300px",
+                  height: "300px",
+                  backgroundColor: index % 2 === 0 ? "#EDD6D3" : "#E9EAE1",
+                  borderRadius: "20px",
+                  fontFamily: "'Patrick Hand', cursive",
+                  fontSize: "30px",
+                }}>
+                <p
+                  className="p-12 text-center leading-tight"
+                  style={{ wordBreak: "break-word" }}>
+                  {memo.content}
+                </p>
               </div>
-            )}
+            ))}
           </div>
         </div>
       </main>

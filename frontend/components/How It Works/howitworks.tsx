@@ -33,7 +33,7 @@ const allSteps = [
     number: "01",
     title: "Create Your Account",
     color: "#F6ECEA",
-    desc: "Register with your campus email to start using the app.",
+    desc: "Register with your email to start using the app.",
   },
   ...steps.map((s) => ({ ...s })),
 ];
