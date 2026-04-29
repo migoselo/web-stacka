@@ -1,19 +1,18 @@
 'use client';
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 
-const AnnotationCard = ({ 
-  title, 
-  description, 
-  top, 
-  left,
-  right 
-}: { 
-  title: string; 
-  description: string; 
-  top: string; 
-  left?: string; 
-  right?: string;
+// Komponen reusable buat tiap card gambar yang cuma maju ke depan (Z-axis)
+const PressableImage = ({
+  src,
+  alt,
+  className = "",
+  onClick,
+}: {
+  src: string;
+  alt: string;
+  className?: string;
+  onClick?: () => void;
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -21,109 +20,114 @@ const AnnotationCard = ({
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={onClick}
+      className={`cursor-pointer ${className}`}
       style={{
-        position: "absolute",
-        top: top,
-        left: left,
-        right: right, 
-        zIndex: 50,
-        width: "300px", 
-        height: "105px",
-        backgroundColor: "white",
-        borderRadius: "16px",
-        padding: "16px 22px",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        boxSizing: "border-box",
-        border: "1px solid rgba(0,0,0,0.05)",
-        cursor: "pointer",
-        transition: "all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)",
-        transform: isHovered ? "translateY(-12px) scale(1.02)" : "translateY(0) scale(1)",
-        boxShadow: isHovered 
-          ? "0 20px 40px rgba(0,0,0,0.12)" 
-          : "0 8px 16px rgba(0,0,0,0.05)",
-        fontFamily: "'Montserrat', sans-serif",
+        perspective: "1000px",
       }}
     >
-      <div style={{ fontWeight: 600, fontSize: "16px", color: "#111", marginBottom: "4px" }}>
-        {title}
-      </div>
-      <div style={{ 
-        fontWeight: 500, 
-        fontSize: "13px", 
-        color: "#AEAEAE", 
-        lineHeight: "20px",
-        letterSpacing: "0",
-        wordBreak: "keep-all", 
-        overflow: "hidden"
-      }}>
-        {description}
-      </div>
+      <img
+        src={src}
+        alt={alt}
+        draggable={false}
+        style={{
+          width: "100%",
+          height: "auto",
+          display: "block",
+          transformStyle: "preserve-3d",
+          // Hanya maju lurus (translateZ) dan sedikit membesar (scale)
+          transform: isHovered 
+            ? "translateZ(50px) scale(1.05)" 
+            : "translateZ(0px) scale(1)",
+          // Durasi transisi standar yang smooth
+          transition: "transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)",
+          filter: isHovered
+            ? "drop-shadow(0 25px 40px rgba(0,0,0,0.2))"
+            : "drop-shadow(0 15px 25px rgba(0,0,0,0.1))",
+          userSelect: "none",
+        }}
+      />
     </div>
   );
 };
 
+// Section utama
 export const FeatureSection: React.FC = () => {
   return (
-    <div className="w-full flex justify-center mb-20 overflow-hidden px-4 md:px-0">
-      <div 
-        className="flex justify-center items-center w-full max-w-[1660px] relative rounded-[25px]"
-        style={{ 
-          minHeight: "600px",
-          // Nilai diubah dari -20px ke -40px untuk menaikkan seluruh section
-          marginTop: "-60px", 
-          background: "linear-gradient(185deg, rgba(255,255,255,0.6) 10%, rgba(233,234,224,0.95) 100%)", 
-          padding: "100px 20px",
-          overflow: "visible"
+    <section className="w-full flex justify-center mb-20 px-4 md:px-6">
+      <div
+        className="w-full max-w-[1660px] rounded-[25px] py-16 md:py-24 px-4"
+        style={{
+          background:
+            "linear-gradient(185deg, rgba(255,255,255,0.6) 10%, rgba(233,234,224,0.95) 100%)",
         }}
       >
-        {/* Kontainer Wrapper dengan Skala Responsif */}
-        <div className="relative w-full max-w-[900px] origin-center scale-[0.45] sm:scale-[0.6] md:scale-[0.8] lg:scale-100 transition-transform duration-500">
+        {/* DESKTOP: layout absolute mengelilingi HP menggunakan hp.svg */}
+        <div className="hidden lg:block relative mx-auto w-full max-w-[900px] min-h-[800px]">
           
-          <img 
-            src="/assets/images/preview.svg" 
-            alt="Stacka App Preview" 
-            style={{ 
-              width: "100%", 
-              height: "auto", 
-              display: "block",
-              borderRadius: "12px" 
-            }} 
+          {/* HP tengah khusus Desktop */}
+          <img
+            src="/assets/images/hp.svg"
+            alt="Stacka App Desktop"
+            className="w-full h-auto mx-auto"
           />
 
-          {/* SISI KIRI */}
-          <AnnotationCard 
-            title="Explore Categories" 
-            description="Choose a category to discover relevant notes and study materials."
-            top="146px"   
-            left="-100px" 
+          {/* 4 Card sebagai gambar interaktif */}
+          <PressableImage
+            src="/assets/images/explore.svg"
+            alt="Explore Categories"
+            className="absolute top-[146px] -left-[100px] w-[300px]"
           />
-
-          <AnnotationCard 
-            title="Recommended Notes" 
-            description="Explore recommended notes shared by students to help you study better."
-            top="637px" 
-            left="-100px" 
+          <PressableImage
+            src="/assets/images/findnotes.svg"
+            alt="Find Notes Fast"
+            className="absolute top-[272px] -right-[100px] w-[300px]"
           />
-
-          {/* SISI KANAN */}
-          <AnnotationCard 
-            title="Find Notes Fast" 
-            description="Easily find and explore study notes shared by other students."
-            top="272px"   
-            right="-100px" 
+          <PressableImage
+            src="/assets/images/share.svg"
+            alt="Share Your Notes"
+            className="absolute top-[525px] -right-[100px] w-[300px]"
           />
-
-          <AnnotationCard 
-            title="Share Your Notes" 
-            description="Share your notes on Stacka and help other students study better."
-            top="525px"
-            right="-100px" 
+          <PressableImage
+            src="/assets/images/allnotes.svg"
+            alt="Recommended Notes"
+            className="absolute top-[637px] -left-[100px] w-[300px]"
           />
 
         </div>
+
+        {/* MOBILE / TABLET: stack vertikal menggunakan s 1.svg */}
+        <div className="lg:hidden flex flex-col items-center gap-6 max-w-md mx-auto">
+          {/* HP tengah khusus Mobile */}
+          <img
+            src="/assets/images/s 1.svg"
+            alt="Stacka App Mobile"
+            className="w-full h-auto mx-auto max-w-[260px] sm:max-w-[320px]"
+          />
+          
+          <PressableImage
+            src="/assets/images/explore.svg"
+            alt="Explore Categories"
+            className="w-full max-w-[320px]"
+          />
+          <PressableImage
+            src="/assets/images/findnotes.svg"
+            alt="Find Notes Fast"
+            className="w-full max-w-[320px]"
+          />
+          <PressableImage
+            src="/assets/images/share.svg"
+            alt="Share Your Notes"
+            className="w-full max-w-[320px]"
+          />
+          <PressableImage
+            src="/assets/images/allnotes.svg"
+            alt="Recommended Notes"
+            className="w-full max-w-[320px]"
+          />
+        </div>
+
       </div>
-    </div>
+    </section>
   );
 };
