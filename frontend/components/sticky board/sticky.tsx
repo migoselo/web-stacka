@@ -119,7 +119,7 @@ const StickyNote = ({
       }}>
       <button
         onClick={() => onRemove(id)}
-        className="absolute top-5 right-5 z-30">
+        className="absolute top-5 right-5 z-50 cursor-pointer hover:scale-110 transition-transform">
         <svg
           width="24"
           height="24"
@@ -305,25 +305,31 @@ export default function StackaBoard() {
               />
             ))}
 
-            {savedMemos.map((memo, index) => (
-              <div
-                key={memo.id}
-                className="relative shadow-lg flex items-center justify-center shrink-0"
-                style={{
-                  width: "300px",
-                  height: "300px",
-                  backgroundColor: index % 2 === 0 ? "#EDD6D3" : "#E9EAE1",
-                  borderRadius: "20px",
-                  fontFamily: "'Patrick Hand', cursive",
-                  fontSize: "30px",
-                }}>
-                <p
-                  className="p-12 text-center leading-tight"
-                  style={{ wordBreak: "break-word" }}>
-                  {memo.content}
-                </p>
+            {Array.isArray(savedMemos) ?
+              savedMemos.map((memo, index) => (
+                <div
+                  key={memo.id}
+                  className="relative shadow-lg flex items-center justify-center shrink-0"
+                  style={{
+                    width: "300px",
+                    height: "300px",
+                    backgroundColor: index % 2 === 0 ? "#EDD6D3" : "#E9EAE1",
+                    borderRadius: "20px",
+                    fontFamily: "'Patrick Hand', cursive",
+                    fontSize: "30px",
+                  }}>
+                  <p
+                    className="p-12 text-center leading-tight"
+                    style={{ wordBreak: "break-word" }}>
+                    {memo.content}
+                  </p>
+                </div>
+              ))
+            : <div className="col-span-full text-center p-10 text-gray-500">
+                {/* Tampilan jika data bukan array atau gagal dimuat */}
+                <p>No records found or the server is busy.</p>
               </div>
-            ))}
+            }
           </div>
         </div>
       </main>

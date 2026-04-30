@@ -12,7 +12,7 @@ export interface DemoMemo {
 }
 
 export async function getMemos(): Promise<DemoMemo[]> {
-  const res = await fetch(`${API_URL}/api/demo-memos`, {
+  const res = await fetch(`${API_URL}/demo-memos`, {
     headers: { Accept: "application/json" },
   });
   return res.json();
@@ -22,7 +22,7 @@ export async function createMemo(
   type: MemoType,
   content: string,
 ): Promise<DemoMemo> {
-  const res = await fetch(`${API_URL}/api/demo-memos`, {
+  const res = await fetch(`${API_URL}/demo-memos`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -48,7 +48,7 @@ export async function createMemo(
 }
 
 export async function deleteMemo(id: number): Promise<void> {
-  await fetch(`${API_URL}/api/demo-memos/${id}`, {
+  await fetch(`${API_URL}/demo-memos/${id}`, {
     method: "DELETE",
     headers: { Accept: "application/json" },
   });
