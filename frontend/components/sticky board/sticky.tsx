@@ -62,6 +62,14 @@ const StickyNote = ({
     };
   };
 
+  const countEmojis = (str: string) => {
+    // Mencocokkan karakter emoji
+    const match = str.match(
+      /[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E6}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1F018}-\u{1F093}]/gu,
+    );
+    return match ? match.length : 0;
+  };
+
   const startDrawing = (e: React.MouseEvent | React.TouchEvent) => {
     if (mode !== "draw") return;
     setIsDrawing(true);
@@ -92,6 +100,13 @@ const StickyNote = ({
     }
     if (text.length > 50) {
       setError("Maximum 50 characters!");
+      return;
+    }
+    if (countEmojis(text) > 10) {
+      setError("Too many emojis! Max 10.");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
       return;
     }
     setSaving(true);
@@ -172,7 +187,33 @@ const StickyNote = ({
 
       {mode === "type" && !saved && (
         <div className="absolute bottom-4 left-0 right-0 flex flex-col items-center gap-1 z-30">
-          {error && <p className="text-red-500 text-xs">{error}</p>}
+          {/* Box Error bergaya Toast di atas tombol Save */}
+          {error && (
+            <div className="absolute bottom-10 left-0 right-0 flex justify-center px-4 z-40 animate-in slide-in-from-bottom-2 duration-300">
+              <div className="bg-[#FAF3F2] border border-[#B73625] shadow-lg py-2 px-4 rounded-xl flex items-center gap-2">
+                {/* Icon Peringatan Kecil */}
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#B73625"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="12"></line>
+                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+
+                <span
+                  className="text-[#B73625] text-[13px] font-medium"
+                  style={{ fontFamily: "'Montserrat', sans-serif" }}>
+                  {error}
+                </span>
+              </div>
+            </div>
+          )}
           <button
             onClick={handleSave}
             disabled={saving}
