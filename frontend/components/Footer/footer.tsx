@@ -6,18 +6,18 @@ const Footer: React.FC = () => {
       {/* CSS untuk menangani responsivitas font dan padding */}
       <style>{`
         .footer-text {
-          font-size: 22px; /* Ukuran default (Desktop) */
+          font-size: 16px; /* Ukuran default (Desktop) */
         }
 
         @media (max-width: 768px) {
           .footer-text {
-            font-size: 18px; /* Tablet */
+            font-size: 13px; /* Tablet */
           }
         }
 
         @media (max-width: 480px) {
           .footer-text {
-            font-size: 16px; /* Mobile */
+            font-size: 13px; /* Mobile */
           }
         }
       `}</style>
@@ -26,7 +26,7 @@ const Footer: React.FC = () => {
         style={{
           width: '100%',
           backgroundColor: '#EDD6D3',
-          minHeight: '80px',
+          minHeight: '50px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
