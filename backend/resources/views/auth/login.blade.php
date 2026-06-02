@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Serene Admin Console</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <style>
         * {
             box-sizing: border-box;
@@ -186,17 +187,24 @@
         }
     </style>
 </head>
+
 <body>
 
     <div class="brand-container">
-        <img src="/images/Logo.svg" style="height: 48px; margin-bottom: 12px; width: auto;">    
+        <img src="/images/Logo.svg" style="height: 48px; margin-bottom: 12px; width: auto;">
         <div class="brand-title">System Console</div>
         <div class="brand-subtitle">Enterprise Management Suite</div>
     </div>
 
     <div class="login-card">
-        <form action="" method="POST">
-            
+        @if ($errors->any())
+        <div style="background:#fee2e2; color:#991b1b; padding:10px; border-radius:8px; margin-bottom:16px; font-size:13px;">
+            {{ $errors->first() }}
+        </div>
+        @endif
+        <form action="{{ route('login.submit') }}" method="POST">
+            @csrf
+
             <div class="form-group">
                 <label class="form-label">Username</label>
                 <div class="input-container">
@@ -220,7 +228,7 @@
             </div>
 
             <button type="submit" class="btn-login">
-                Login 
+                Login
             </button>
         </form>
 
@@ -234,7 +242,7 @@
         function togglePasswordView() {
             const passwordInput = document.getElementById('password');
             const icon = document.querySelector('.toggle-password');
-            
+
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
                 icon.classList.remove('fa-regular', 'fa-eye');
@@ -247,4 +255,5 @@
         }
     </script>
 </body>
+
 </html>
