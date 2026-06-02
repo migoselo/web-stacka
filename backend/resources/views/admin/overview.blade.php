@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,31 +9,44 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
 
         /* Date range dropdown */
-        #date-dropdown { display: none; }
-        #date-dropdown.open { display: block; }
+        #date-dropdown {
+            display: none;
+        }
+
+        #date-dropdown.open {
+            display: block;
+        }
 
         /* Chart bar transition */
-        .bar-col { transition: height 0.35s cubic-bezier(.4,0,.2,1), background 0.2s; }
+        .bar-col {
+            transition: height 0.35s cubic-bezier(.4, 0, .2, 1), background 0.2s;
+        }
 
         /* Activity item hidden by search */
-        .activity-item.hidden-by-search { display: none; }
+        .activity-item.hidden-by-search {
+            display: none;
+        }
     </style>
 </head>
+
 <body class="bg-[#F8F9FA] text-[#1F1F1F] flex h-screen overflow-hidden">
 
     <aside class="w-64 bg-[#1F1F1F] text-white flex flex-col justify-between p-6 flex-shrink-0 h-full">
         <div>
             <div class="flex items-center space-x-3 mb-8">
-             <img src="{{ asset('images/Logo 2.svg') }}" alt="Logo" class="w-9 h-9 object-contain">
-    
-                 <div>
-        <h2 class="font-bold text-base tracking-wide leading-none">Admin Portal</h2>
-        <span class="text-[10px] text-gray-400 tracking-widest uppercase">Management Suite</span>
-    </div>
-</div>
+                <img src="{{ asset('images/Logo 2.svg') }}" alt="Logo" class="w-9 h-9 object-contain">
+
+                <div>
+                    <h2 class="font-bold text-base tracking-wide leading-none">Admin Portal</h2>
+                    <span class="text-[10px] text-gray-400 tracking-widest uppercase">Management Suite</span>
+                </div>
+            </div>
 
 
             <nav class="space-y-1">
@@ -55,12 +69,23 @@
             </nav>
         </div>
 
-        <div class="flex items-center space-x-3 border-t border-white/10 pt-4">
-            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar" class="w-10 h-10 rounded-full border border-white/20 object-cover">
-            <div class="overflow-hidden">
-                <h4 class="text-sm font-semibold leading-none mb-1">{{ $admin_name }}</h4>
-                <p class="text-xs text-gray-400 truncate font-mono">{{ $admin_email }}</p>
+        <div class="border-t border-white/10 pt-4 space-y-3">
+            <div class="flex items-center space-x-3">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar" class="w-10 h-10 rounded-full border border-white/20 object-cover">
+                <div class="overflow-hidden">
+                    <h4 class="text-sm font-semibold leading-none mb-1">{{ $admin_name }}</h4>
+                    <p class="text-xs text-gray-400 truncate font-mono">{{ $admin_email }}</p>
+                </div>
             </div>
+
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit"
+                    class="w-full flex items-center justify-center space-x-2 px-4 py-2.5 rounded-lg bg-white/10 hover:bg-red-500/90 text-gray-300 hover:text-white text-xs font-semibold transition">
+                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                    <span>Logout</span>
+                </button>
+            </form>
         </div>
     </aside>
 
@@ -73,16 +98,15 @@
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
                         <i data-lucide="search" class="w-4 h-4"></i>
                     </span>
-                    {{-- 
+                    {{--
                         Global search — memfilter Recent Search Activity secara real-time.
                         Ketik nama user atau keyword untuk menyaring aktivitas.
                     --}}
-                    <input 
+                    <input
                         id="global-search"
-                        type="text" 
-                        placeholder="Search activity by user or keyword..." 
-                        class="w-full bg-[#F1F3F5] text-sm text-gray-700 pl-10 pr-4 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-300 transition"
-                    >
+                        type="text"
+                        placeholder="Search activity by user or keyword..."
+                        class="w-full bg-[#F1F3F5] text-sm text-gray-700 pl-10 pr-4 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-300 transition">
                 </div>
             </div>
 
@@ -109,10 +133,9 @@
 
                     {{-- DATE RANGE PICKER --}}
                     <div class="relative">
-                        <button 
+                        <button
                             id="date-range-btn"
-                            class="flex items-center space-x-2 bg-white border border-gray-200 text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-50 transition shadow-sm text-gray-700"
-                        >
+                            class="flex items-center space-x-2 bg-white border border-gray-200 text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-50 transition shadow-sm text-gray-700">
                             <i data-lucide="calendar" class="w-4 h-4"></i>
                             <span id="date-range-label">Last 30 Days</span>
                             <i data-lucide="chevron-down" class="w-3 h-3 ml-1 text-gray-400"></i>
@@ -128,10 +151,9 @@
                     </div>
 
                     {{-- EXPORT REPORT --}}
-                    <button 
+                    <button
                         id="export-btn"
-                        class="flex items-center space-x-2 bg-[#1F1F1F] text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-black transition shadow-sm"
-                    >
+                        class="flex items-center space-x-2 bg-[#1F1F1F] text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-black transition shadow-sm">
                         <i data-lucide="download" class="w-4 h-4"></i>
                         <span>Export Report</span>
                     </button>
@@ -236,30 +258,29 @@
 
                         <div id="activity-list" class="space-y-5">
                             @if(isset($recent_activities) && !$recent_activities->isEmpty())
-                                @foreach ($recent_activities as $activity)
-                                    <div 
-                                        class="activity-item flex items-start space-x-4"
-                                        data-name="{{ strtolower($activity->name) }}"
-                                        data-query="{{ strtolower($activity->query) }}"
-                                    >
-                                        <div class="bg-[#F1F3F5] p-2.5 rounded-full text-gray-600 flex-shrink-0">
-                                            <i data-lucide="search" class="w-4 h-4"></i>
-                                        </div>
-                                        <div class="flex-1 min-w-0">
-                                            <h4 class="text-sm font-bold text-gray-900 truncate mb-0.5">Keyword Searched</h4>
-                                            <p class="text-xs text-gray-500 leading-snug mb-1">
-                                                <strong>{{ $activity->name }}</strong> searched for "{{ $activity->query }}".
-                                            </p>
-                                            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">
-                                                {{ date('d M, H:i', strtotime($activity->createdAt)) }}
-                                            </span>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            @else
-                                <div id="no-activities" class="text-center py-12 text-xs text-gray-400 font-medium">
-                                    No queries executed recently.
+                            @foreach ($recent_activities as $activity)
+                            <div
+                                class="activity-item flex items-start space-x-4"
+                                data-name="{{ strtolower($activity->name) }}"
+                                data-query="{{ strtolower($activity->query) }}">
+                                <div class="bg-[#F1F3F5] p-2.5 rounded-full text-gray-600 flex-shrink-0">
+                                    <i data-lucide="search" class="w-4 h-4"></i>
                                 </div>
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="text-sm font-bold text-gray-900 truncate mb-0.5">Keyword Searched</h4>
+                                    <p class="text-xs text-gray-500 leading-snug mb-1">
+                                        <strong>{{ $activity->name }}</strong> searched for "{{ $activity->query }}".
+                                    </p>
+                                    <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">
+                                        {{ date('d M, H:i', strtotime($activity->createdAt)) }}
+                                    </span>
+                                </div>
+                            </div>
+                            @endforeach
+                            @else
+                            <div id="no-activities" class="text-center py-12 text-xs text-gray-400 font-medium">
+                                No queries executed recently.
+                            </div>
                             @endif
                         </div>
 
@@ -286,33 +307,33 @@
                 subtitle: 'Real-time request processing volume',
                 yLabel: ['0', '25k', '50k', '75k', '100k'],
                 bars: {
-                    7:   [38, 52, 44, 60, 55, 70, 65],
-                    30:  [35, 45, 60, 50, 75, 70, 80, 65, 90],
-                    90:  [42, 55, 67, 48, 78, 60, 85, 70, 92, 58, 76, 88],
+                    7: [38, 52, 44, 60, 55, 70, 65],
+                    30: [35, 45, 60, 50, 75, 70, 80, 65, 90],
+                    90: [42, 55, 67, 48, 78, 60, 85, 70, 92, 58, 76, 88],
                     365: [30, 48, 55, 62, 70, 58, 65, 72, 80, 68, 74, 88],
-                    1:   [20, 40, 55, 70, 60, 75, 80, 68, 72],
+                    1: [20, 40, 55, 70, 60, 75, 80, 68, 72],
                 }
             },
             errors: {
                 subtitle: 'HTTP errors & failed request rate',
                 yLabel: ['0', '50', '100', '150', '200'],
                 bars: {
-                    7:   [5, 12, 8, 20, 15, 10, 18],
-                    30:  [8, 15, 22, 10, 30, 25, 18, 12, 35],
-                    90:  [10, 20, 28, 15, 35, 22, 40, 18, 32, 25, 38, 45],
+                    7: [5, 12, 8, 20, 15, 10, 18],
+                    30: [8, 15, 22, 10, 30, 25, 18, 12, 35],
+                    90: [10, 20, 28, 15, 35, 22, 40, 18, 32, 25, 38, 45],
                     365: [12, 22, 18, 30, 25, 20, 35, 28, 40, 32, 38, 50],
-                    1:   [3, 8, 5, 15, 10, 6, 12, 9, 7],
+                    1: [3, 8, 5, 15, 10, 6, 12, 9, 7],
                 }
             },
             latency: {
                 subtitle: 'Average response time in milliseconds',
                 yLabel: ['0ms', '100ms', '200ms', '300ms', '400ms'],
                 bars: {
-                    7:   [22, 40, 35, 55, 48, 62, 45],
-                    30:  [30, 42, 55, 38, 68, 60, 72, 50, 80],
-                    90:  [35, 48, 60, 42, 72, 55, 80, 65, 85, 52, 70, 78],
+                    7: [22, 40, 35, 55, 48, 62, 45],
+                    30: [30, 42, 55, 38, 68, 60, 72, 50, 80],
+                    90: [35, 48, 60, 42, 72, 55, 80, 65, 85, 52, 70, 78],
                     365: [28, 45, 52, 60, 65, 55, 62, 70, 75, 65, 72, 85],
-                    1:   [18, 35, 45, 60, 52, 68, 72, 58, 64],
+                    1: [18, 35, 45, 60, 52, 68, 72, 58, 64],
                 }
             }
         };
@@ -320,26 +341,26 @@
         // Warna per tab
         const tabColors = {
             queries: '#B8C2B6',
-            errors:  '#E0A0A0',
+            errors: '#E0A0A0',
             latency: '#A0B8C8'
         };
 
         const tabHoverColors = {
             queries: '#9EAD9B',
-            errors:  '#C88080',
+            errors: '#C88080',
             latency: '#7A9DB8'
         };
 
-        let activeTab  = 'queries';
+        let activeTab = 'queries';
         let activeDays = 30;
 
         /* Render bar chart */
         function renderChart() {
-            const data    = chartData[activeTab];
-            const bars    = data.bars[activeDays] || data.bars[30];
-            const max     = Math.max(...bars);
-            const color   = tabColors[activeTab];
-            const hover   = tabHoverColors[activeTab];
+            const data = chartData[activeTab];
+            const bars = data.bars[activeDays] || data.bars[30];
+            const max = Math.max(...bars);
+            const color = tabColors[activeTab];
+            const hover = tabHoverColors[activeTab];
 
             // Bars
             const barsEl = document.getElementById('chart-bars');
@@ -362,17 +383,17 @@
             const step = Math.max(1, Math.floor(bars.length / 4));
             const xLabels = document.getElementById('chart-x-labels');
             const labelMap = {
-                1:   ['00:00','06:00','12:00','18:00','Now'],
-                7:   ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].slice(0, bars.length),
-                30:  ['May 01','May 08','May 15','May 22','May 29'],
-                90:  ['Mar 01','Mar 22','Apr 12','May 02','May 29'],
-                365: ['Jan','Mar','May','Aug','Dec'],
+                1: ['00:00', '06:00', '12:00', '18:00', 'Now'],
+                7: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].slice(0, bars.length),
+                30: ['May 01', 'May 08', 'May 15', 'May 22', 'May 29'],
+                90: ['Mar 01', 'Mar 22', 'Apr 12', 'May 02', 'May 29'],
+                365: ['Jan', 'Mar', 'May', 'Aug', 'Dec'],
             };
             const labels = labelMap[activeDays] || labelMap[30];
             xLabels.innerHTML = labels.map(l => `<span>${l}</span>`).join('');
 
             // Y label
-            document.getElementById('chart-y-label').innerHTML = 
+            document.getElementById('chart-y-label').innerHTML =
                 data.yLabel.reverse().map(l => `<span class="text-[9px]">${l}</span>`).join('');
             data.yLabel.reverse(); // restore
 
@@ -386,10 +407,10 @@
         document.querySelectorAll('.chart-tab').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.chart-tab').forEach(b => {
-                    b.classList.remove('bg-white','text-gray-900','shadow-sm');
+                    b.classList.remove('bg-white', 'text-gray-900', 'shadow-sm');
                     b.classList.add('text-gray-500');
                 });
-                btn.classList.add('bg-white','text-gray-900','shadow-sm');
+                btn.classList.add('bg-white', 'text-gray-900', 'shadow-sm');
                 btn.classList.remove('text-gray-500');
                 activeTab = btn.dataset.tab;
                 renderChart();
@@ -424,13 +445,13 @@
         /* ===================================================
            4. GLOBAL SEARCH — filter Recent Activity
         =================================================== */
-        document.getElementById('global-search').addEventListener('input', function () {
+        document.getElementById('global-search').addEventListener('input', function() {
             const q = this.value.trim().toLowerCase();
             const items = document.querySelectorAll('.activity-item');
             let visible = 0;
 
             items.forEach(item => {
-                const name  = item.dataset.name  || '';
+                const name = item.dataset.name || '';
                 const query = item.dataset.query || '';
                 const match = name.includes(q) || query.includes(q);
                 item.classList.toggle('hidden-by-search', !match);
@@ -458,17 +479,19 @@
                 `System Health: {{ $systemHealth }}%`,
                 '---',
                 'Recent Search Activity:',
-                @if(isset($recent_activities) && !$recent_activities->isEmpty())
-                    @foreach ($recent_activities as $activity)
-                        '{{ addslashes($activity->name) }} searched "{{ addslashes($activity->query) }}" at {{ date('d M Y H:i', strtotime($activity->createdAt)) }}',
-                    @endforeach
+                @if(isset($recent_activities) && $recent_activities -> isNotEmpty())
+                @foreach($recent_activities as $activity)
+                `{{ addslashes($activity->name) }} searched "{{ addslashes($activity->query) }}" at {{ date('d M Y H:i', strtotime($activity->createdAt)) }}`,
+                @endforeach
                 @endif
             ];
 
-            const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
-            const url  = URL.createObjectURL(blob);
-            const a    = document.createElement('a');
-            a.href     = url;
+            const blob = new Blob([lines.join('\n')], {
+                type: 'text/plain'
+            });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
             a.download = `report_${activeTab}_${activeDays}days.txt`;
             a.click();
             URL.revokeObjectURL(url);
@@ -480,4 +503,5 @@
         renderChart();
     </script>
 </body>
+
 </html>

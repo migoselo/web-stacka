@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,21 +9,25 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
     </style>
 </head>
+
 <body class="bg-[#F8F9FA] text-[#1F1F1F] flex h-screen overflow-hidden">
 
     <aside class="w-64 bg-[#1F1F1F] text-white flex flex-col justify-between p-6 flex-shrink-0 h-full">
-         <div>
+        <div>
             <div class="flex items-center space-x-3 mb-8">
-             <img src="{{ asset('images/Logo 2.svg') }}" alt="Logo" class="w-9 h-9 object-contain">
-    
-                 <div>
-        <h2 class="font-bold text-base tracking-wide leading-none">Admin Portal</h2>
-        <span class="text-[10px] text-gray-400 tracking-widest uppercase">Management Suite</span>
-    </div>
-</div>
+                <img src="{{ asset('images/Logo 2.svg') }}" alt="Logo" class="w-9 h-9 object-contain">
+
+                <div>
+                    <h2 class="font-bold text-base tracking-wide leading-none">Admin Portal</h2>
+                    <span class="text-[10px] text-gray-400 tracking-widest uppercase">Management Suite</span>
+                </div>
+            </div>
 
             <nav class="space-y-1">
                 <a href="{{ route('admin.overview') }}" class="flex items-center space-x-3 text-gray-400 hover:bg-white/5 hover:text-white px-4 py-3 rounded-lg font-medium text-sm transition">
@@ -44,17 +49,28 @@
             </nav>
         </div>
 
-        <div class="flex items-center space-x-3 border-t border-white/10 pt-4">
-            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar" class="w-10 h-10 rounded-full border border-white/20 object-cover">
-            <div class="overflow-hidden">
-                <h4 class="text-sm font-semibold leading-none mb-1">{{ $admin_name }}</h4>
-                <p class="text-xs text-gray-400 truncate font-mono">{{ $admin_email }}</p>
+        <div class="border-t border-white/10 pt-4 space-y-3">
+            <div class="flex items-center space-x-3">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar" class="w-10 h-10 rounded-full border border-white/20 object-cover">
+                <div class="overflow-hidden">
+                    <h4 class="text-sm font-semibold leading-none mb-1">{{ $admin_name }}</h4>
+                    <p class="text-xs text-gray-400 truncate font-mono">{{ $admin_email }}</p>
+                </div>
             </div>
+
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit"
+                    class="w-full flex items-center justify-center space-x-2 px-4 py-2.5 rounded-lg bg-white/10 hover:bg-red-500/90 text-gray-300 hover:text-white text-xs font-semibold transition">
+                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                    <span>Logout</span>
+                </button>
+            </form>
         </div>
     </aside>
 
     <div class="flex-1 flex flex-col overflow-hidden h-full">
-        
+
         <header class="h-16 bg-white border-b border-gray-100 flex items-center justify-between px-8 z-10 flex-shrink-0">
             <div class="flex items-center space-x-6 w-1/2">
                 <h1 class="text-lg font-bold text-gray-800 whitespace-nowrap">System Console</h1>
@@ -76,7 +92,7 @@
         </header>
 
         <main class="flex-1 overflow-y-auto p-8">
-            
+
             <div class="mb-6">
                 <h2 class="text-2xl font-bold text-gray-900">Storage Information</h2>
                 <p class="text-sm text-gray-500">Monitor and manage your global infrastructure storage footprint.</p>
@@ -146,7 +162,7 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
-                
+
                 <div class="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm flex flex-col justify-between min-h-[420px]">
                     <div class="flex justify-between items-center">
                         <h3 class="text-base font-bold text-gray-900">File Type Breakdown</h3>
@@ -157,7 +173,7 @@
                         <div class="w-40 h-40 rounded-full border-[14px] border-gray-100 flex items-center justify-center relative">
                             <div class="absolute inset-0 rounded-full border-[14px] border-transparent border-t-[#1F1F1F] border-r-gray-400/40 rotate-45"></div>
                             <div class="absolute inset-0 rounded-full border-[14px] border-transparent border-b-[#D4B8B4]/80 -rotate-45"></div>
-                            
+
                             <div class="text-center">
                                 <span class="text-2xl font-bold text-gray-900 block leading-none">
                                     {{ $totalNotes + $totalDownloads + $totalBookmarks + $totalLikes }}
@@ -193,7 +209,7 @@
                 </div>
 
                 <div class="lg:col-span-2 bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden flex flex-col justify-between min-h-[420px]">
-                    
+
                     <div class="p-4 border-b border-gray-100 flex justify-between items-center bg-white">
                         <div>
                             <h3 class="text-base font-bold text-gray-900">Recent Uploaded Files</h3>
@@ -220,33 +236,33 @@
                             </thead>
                             <tbody class="divide-y divide-gray-100 text-xs text-gray-700">
                                 @forelse ($recentUploads as $file)
-                                    <tr class="hover:bg-[#F8F9FA]/50 transition">
-                                        <td class="py-4 px-6">
-                                            <div class="font-bold text-gray-900 truncate max-w-[180px] tracking-wide leading-tight">{{ $file->title }}</div>
-                                            <div class="text-[10px] text-gray-400 mt-0.5 truncate max-w-[180px]">{{ $file->description ?? 'No description' }}</div>
-                                        </td>
-                                        <td class="py-4 px-6 font-mono text-gray-900 font-semibold">
-                                            {{ $file->formatted_size }}
-                                        </td>
-                                        <td class="py-4 px-6">
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold tracking-wide bg-[#EBF5EE] text-[#2E7D32]">
-                                                <i data-lucide="file" class="w-3 h-3 mr-1"></i>
-                                                supabase-bucket/materi
-                                            </span>
-                                        </td>
-                                        <td class="py-4 px-6 text-gray-500 font-medium">
-                                            {{ \Carbon\Carbon::parse($file->createdAt)->diffForHumans() }}
-                                        </td>
-                                        <td class="py-4 px-6 text-right text-gray-400">
-                                            <button class="hover:text-red-600 transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                                        </td>
-                                    </tr>
+                                <tr class="hover:bg-[#F8F9FA]/50 transition">
+                                    <td class="py-4 px-6">
+                                        <div class="font-bold text-gray-900 truncate max-w-[180px] tracking-wide leading-tight">{{ $file->title }}</div>
+                                        <div class="text-[10px] text-gray-400 mt-0.5 truncate max-w-[180px]">{{ $file->description ?? 'No description' }}</div>
+                                    </td>
+                                    <td class="py-4 px-6 font-mono text-gray-900 font-semibold">
+                                        {{ $file->formatted_size }}
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold tracking-wide bg-[#EBF5EE] text-[#2E7D32]">
+                                            <i data-lucide="file" class="w-3 h-3 mr-1"></i>
+                                            supabase-bucket/materi
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-6 text-gray-500 font-medium">
+                                        {{ \Carbon\Carbon::parse($file->createdAt)->diffForHumans() }}
+                                    </td>
+                                    <td class="py-4 px-6 text-right text-gray-400">
+                                        <button class="hover:text-red-600 transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                                    </td>
+                                </tr>
                                 @empty
-                                    <tr>
-                                        <td colspan="5" class="py-8 text-center text-gray-400 font-medium">
-                                            Belum ada file materi kuliah yang diunggah mahasiswa.
-                                        </td>
-                                    </tr>
+                                <tr>
+                                    <td colspan="5" class="py-8 text-center text-gray-400 font-medium">
+                                        Belum ada file materi kuliah yang diunggah mahasiswa.
+                                    </td>
+                                </tr>
                                 @endforelse
                             </tbody>
                         </table>
@@ -261,4 +277,5 @@
         lucide.createIcons();
     </script>
 </body>
+
 </html>
