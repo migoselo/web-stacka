@@ -15,9 +15,9 @@ class AdminController extends Controller
         $totalUsers = DB::table('users')->count();
         $totalNotes = DB::table('notes')->count();
         $activeSessions = DB::table('sessions')->count();
-        
+
         $totalCache = DB::table('cache')->count();
-        $systemHealth = $totalCache > 0 ? 99.98 : 100.00; 
+        $systemHealth = $totalCache > 0 ? 99.98 : 100.00;
 
         $traffic_data = collect([
             (object) ['day' => 'MAY 01', 'height' => '35%'],
@@ -39,13 +39,13 @@ class AdminController extends Controller
             ->get();
 
         return view('admin.overview', compact(
-            'admin_name', 
-            'admin_email', 
-            'totalUsers', 
-            'totalNotes', 
-            'activeSessions', 
-            'systemHealth', 
-            'traffic_data', 
+            'admin_name',
+            'admin_email',
+            'totalUsers',
+            'totalNotes',
+            'activeSessions',
+            'systemHealth',
+            'traffic_data',
             'recent_activities'
         ));
     }
@@ -56,12 +56,12 @@ class AdminController extends Controller
         $admin_name = "Admin User";
         $admin_email = "ADMIN@SYSTEM.COM";
 
-        $usersPaginator = DB::table('users')->orderBy('createdAt', 'desc')->paginate(10); 
+        $usersPaginator = DB::table('users')->orderBy('createdAt', 'desc')->paginate(10);
         $activeUserIds = DB::table('sessions')->pluck('userId')->toArray();
         $totalUsers = DB::table('users')->count();
-        $users = $usersPaginator->map(function($user) use ($activeUserIds) {
-        $words = explode(' ', $user->name);
-        $initials = strtoupper(substr($words[0], 0, 1) . (isset($words[1]) ? substr($words[1], 0, 1) : ''));
+        $users = $usersPaginator->map(function ($user) use ($activeUserIds) {
+            $words = explode(' ', $user->name);
+            $initials = strtoupper(substr($words[0], 0, 1) . (isset($words[1]) ? substr($words[1], 0, 1) : ''));
 
             return [
                 'id' => '#USR-' . $user->id,
@@ -96,9 +96,9 @@ class AdminController extends Controller
 
         $totalEvents = DB::table('search_histories')->count();
 
-        $logs_today = $rawLogsPaginator->map(function($log) {
+        $logs_today = $rawLogsPaginator->map(function ($log) {
             $queryLength = strlen($log->query);
-            
+
             if ($queryLength > 20) {
                 $type = 'critical';
                 $title = 'Long query parameters sequence executed';
@@ -140,24 +140,30 @@ class AdminController extends Controller
         $totalLikes = DB::table('likes')->count();
 
         $totalFileSizeBytes = DB::table('notes')->sum('fileSize');
-        
+
         $diskUsageGB = round($totalFileSizeBytes / (1024 * 1024 * 1024), 2);
-        if ($diskUsageGB == 0) { $diskUsageGB = 0.15; } // Fallback angka awal
+        if ($diskUsageGB == 0) {
+            $diskUsageGB = 0.15;
+        } // Fallback angka awal
         $diskPercent = min(round(($diskUsageGB / 0.5) * 100), 100); // Limit gratis 0.5 GB
 
         $totalRowsInteraction = $totalBookmarks + $totalLikes + DB::table('note_hashtags')->count();
         $databaseSizeMB = round(($totalRowsInteraction * 1.5) / 1024, 2);
-        if ($databaseSizeMB == 0) { $databaseSizeMB = 1.24; }
+        if ($databaseSizeMB == 0) {
+            $databaseSizeMB = 1.24;
+        }
 
         $cloudAssetsMB = round($totalFileSizeBytes / (1024 * 1024), 1);
-        if ($cloudAssetsMB == 0) { $cloudAssetsMB = 15.4; }
+        if ($cloudAssetsMB == 0) {
+            $cloudAssetsMB = 15.4;
+        }
         $cloudPercent = min(round(($cloudAssetsMB / 500) * 100), 100);
 
         $recentUploads = DB::table('notes')
             ->orderBy('createdAt', 'desc') // Sesuai nama kolom di ERD kamu
             ->limit(5)
             ->get()
-            ->map(function($note) {
+            ->map(function ($note) {
                 if ($note->fileSize >= 1048576) {
                     $note->formatted_size = round($note->fileSize / 1048576, 2) . ' MB';
                 } else {
@@ -167,8 +173,48 @@ class AdminController extends Controller
             });
 
         return view('admin.storage', compact(
-            'admin_name', 'admin_email', 'totalNotes', 'totalDownloads', 'totalBookmarks', 'totalLikes', 
-            'diskUsageGB', 'diskPercent', 'databaseSizeMB', 'cloudAssetsMB', 'cloudPercent', 'recentUploads'
+            'admin_name',
+            'admin_email',
+            'totalNotes',
+            'totalDownloads',
+            'totalBookmarks',
+            'totalLikes',
+            'diskUsageGB',
+            'diskPercent',
+            'databaseSizeMB',
+            'cloudAssetsMB',
+            'cloudPercent',
+            'recentUploads'
         ));
+    }
+
+    public function login(Request $request)
+    {
+        $request->validate([
+            'username' => 'required',
+            'password' => 'required',
+        ]);
+
+        $admin = DB::table('admins')
+            ->where('email', $request->username)
+            ->first();
+
+        if (!$admin || !password_verify($request->password, $admin->password)) {
+            return back()->withErrors(['username' => 'Invalid credentials']);
+        }
+
+        session(['admin' => [
+            'id' => $admin->id,
+            'name' => $admin->name,
+            'email' => $admin->email,
+        ]]);
+
+        return redirect()->route('admin.overview');
+    }
+
+    public function logout()
+    {
+        session()->forget('admin');
+        return redirect('/');
     }
 }
