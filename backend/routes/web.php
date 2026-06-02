@@ -15,7 +15,9 @@ Route::post('/login', [AdminController::class, 'login'])->name('login.submit');
 Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
 
 // Halaman Admin
-Route::get('/admin/overview', [AdminController::class, 'overview'])->name('admin.overview');
-Route::get('/admin/tables', [AdminController::class, 'tables'])->name('admin.tables');
-Route::get('/admin/logs', [AdminController::class, 'logs'])->name('admin.logs');
-Route::get('/admin/storage', [AdminController::class, 'storage'])->name('admin.storage');
+Route::middleware('admin.auth')->group(function () {
+    Route::get('/admin/overview', [AdminController::class, 'overview'])->name('admin.overview');
+    Route::get('/admin/tables', [AdminController::class, 'tables'])->name('admin.tables');
+    Route::get('/admin/logs', [AdminController::class, 'logs'])->name('admin.logs');
+    Route::get('/admin/storage', [AdminController::class, 'storage'])->name('admin.storage');
+});
